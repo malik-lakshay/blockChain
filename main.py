@@ -103,10 +103,25 @@ def get_last_block():
     return jsonify({'last_block': last_block_dict})
 
 
-@app.route('/hello')
-def hello_world():
-    return 'Hello, World!'
+@app.route('/search_transaction', methods=['GET'])
+def search_transaction():
+    # Get the transaction ID from the request parameters
+    transaction_id = request.args.get('transaction_id')
+
+    # Iterate through the blockchain to search for the transaction with the specified ID
+    for block in blockchain.chain:
+        for tx in block.transactions:
+            if tx.transactionID == transaction_id:
+                # Transaction found, return the details
+                return jsonify({
+                    'transaction': tx.to_dict(),
+                    'block_hash': block.hash,
+                    'block_previous_hash': block.prev_hash
+                })
+
+    # Transaction with the specified ID not found
+    return jsonify({'message': 'Transaction not found'}), 404
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run()
