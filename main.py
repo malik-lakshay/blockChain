@@ -103,5 +103,10 @@ def get_last_block():
     return jsonify({'last_block': last_block_dict})
 
 
-if __name__ == '__main__':`
-    app.run(host="0.0.0.0", port=5000)
+@app.route('/hello')
+def hello_world():
+    return 'Hello, World!'
+
+
+if __name__ == '__main__':
+    app.run()
