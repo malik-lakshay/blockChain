@@ -23,7 +23,7 @@ class Transaction:
 
 class Block:
     def __init__(self, transactions, prev_hash):
-        self.transactions = transactions[:2]  # Take only the first 2 transactions
+        self.transactions = transactions[:5]  # Take only the first 2 transactions
         self.prev_hash = prev_hash
         self.hash = self.calculate_hash()
 
@@ -48,15 +48,15 @@ class MyBlockchain:
     def addBlock(self, transactions):
         prev_hash = self.chain[-1].hash
         tx_objects = [Transaction(tx['sender'], tx['receiver'], tx['amount'], tx['transactionID']) for tx in transactions]
-        if len(tx_objects) <= 2:
+        if len(tx_objects) <= 5:
             block = Block(tx_objects, prev_hash)
             self.chain.append(block)
         else:
             while tx_objects:
-                block_transactions = tx_objects[:2]
+                block_transactions = tx_objects[:5]
                 block = Block(block_transactions, prev_hash)
                 self.chain.append(block)
-                tx_objects = tx_objects[2:]
+                tx_objects = tx_objects[5:]
                 prev_hash = block.hash
 
     def traverseBlockchain(self):
@@ -103,4 +103,4 @@ def get_last_block():
     return jsonify({'last_block': last_block_dict})
 
 
-app.run()
+app.run(host="0.0.0.0", port=5000)
